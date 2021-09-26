@@ -27,7 +27,7 @@ static struct option long_options[] = {
 };
 
 static char *getDate(int longDate) {
-    static char output[128] = {0};
+    char *output = malloc(128);
     int hours, minutes, seconds, day, month, year;
     time_t now;
 
@@ -78,11 +78,11 @@ static char *gp4Template =
 "</psproject>";
 
 static void printHelp() {
-    printf("Usage: gp4gen --content-id <content-d> --files <files separated by comma> [--pg4-filename <filename.gp4>]\n");
+    printf("Usage: gp4-generator --content-id <content-d> --files <files separated by comma> [--pg4-filename <filename.gp4>]\n");
 }
 
 static char *generateStringFiles() {
-    static char output[64*1024];
+    char *output = malloc(64*1024);
     char delim[] = ",";
 
     char *ptr = strtok(info_table[1].value, delim);
@@ -98,7 +98,11 @@ static char *generateStringFiles() {
 
 static void generateGP4() {
     char output[128*1024] = {0};
-    sprintf(output, gp4Template, getDate(1), info_table[0].value, getDate(0), generateStringFiles());
+    char *longDate = getDate(1);
+    char *shortDate = getDate(0);
+    char *files = generateStringFiles();
+
+    sprintf(output, gp4Template, longDate, info_table[0].value, shortDate, files);
 
     FILE *file = fopen(info_table[2].value, "w");
     int results = fputs(output, file);
@@ -107,6 +111,10 @@ static void generateGP4() {
         exit(1);
     }
     fclose(file);
+
+    free(longDate);
+    free(shortDate);
+    free(files);
 }
 
 static int checkInfoTable() {
