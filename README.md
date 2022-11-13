@@ -3,7 +3,7 @@ Local application that generate GP4 files for Orbis PKG
 
 ## Usage
 ```bash
-./gp4gen --content-id <content-d> --files <files separated by comma> [--pg4-filename <filename.gp4>]
+./gp4gen --content-id <content-d> --files <files separated by comma> [--gp4-filename <filename.gp4>]
 ```
 
 Example:
