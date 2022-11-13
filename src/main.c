@@ -78,7 +78,7 @@ static char *gp4Template =
 "</psproject>";
 
 static void printHelp() {
-    printf("Usage: gp4-generator --content-id <content-d> --files <files separated by comma> [--pg4-filename <filename.gp4>]\n");
+    printf("Usage: gp4-generator --content-id <content-d> --files <files separated by comma> [--gp4-filename <filename.gp4>]\n");
 }
 
 static char *generateStringFiles() {
