@@ -23,6 +23,7 @@ static struct option long_options[] = {
 /*   NAME                   ARGUMENT           FLAG  SHORTNAME */
     {info_table[0].name,    required_argument, NULL, 0},
     {info_table[1].name,    required_argument, NULL, 0},
+    {info_table[2].name,    optional_argument, NULL, 0},
     {NULL,                  0,                 NULL, 0}
 };
 
