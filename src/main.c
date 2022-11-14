@@ -23,6 +23,7 @@ static struct option long_options[] = {
 /*   NAME                   ARGUMENT           FLAG  SHORTNAME */
     {info_table[0].name,    required_argument, NULL, 0},
     {info_table[1].name,    required_argument, NULL, 0},
+    {info_table[2].name,    required_argument, NULL, 0},
     {NULL,                  0,                 NULL, 0}
 };
 
@@ -105,6 +106,10 @@ static void generateGP4() {
     sprintf(output, gp4Template, longDate, info_table[0].value, shortDate, files);
 
     FILE *file = fopen(info_table[2].value, "w");
+    if (!file) {
+        printf("GP4 file can't be created, please create destination folder first.\n");
+        exit(1);
+    }
     int results = fputs(output, file);
     if (results == EOF) {
         printf("Error generating GP4 file\n");
@@ -140,15 +145,14 @@ static int readParameters(int argc, char **argv) {
 
     while ((c = getopt_long(argc, argv, "0:",
                  long_options, &option_index)) != -1) {
-        int this_option_optind = optind ? optind : 1;
         switch (c) {
         case 0:
-            // printf ("option %s", long_options[option_index].name);
+            // printf("option %s", long_options[option_index].name);
             if (optarg) {
-                // printf (" with arg %s", optarg);
+                // printf(" with arg %s", optarg);
                 strcpy(info_table[option_index].value, optarg);
             }
-            // printf ("\n");
+            // printf("\n");
             break;
         default:
             break;
