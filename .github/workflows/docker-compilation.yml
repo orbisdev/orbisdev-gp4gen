@@ -1,0 +1,42 @@
+name: CI-compile
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: alpine:3.15.6
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        apk add build-base make bash
+        
+    - name: Runs all the stages in the shell
+      run: |
+        export ORBISDEV="something"
+        make clean all
+    
+    - name: Generate example
+      run: |
+        ./gp4gen --content-id IV0003-BIGB00004_00-ORBISLINK0000000 \
+          --files eboot.bin,sce_sys/param.sfo,sce_sys/pic1.png,sce_sys/icon0.png,sce_sys/pic0.png \
+          --gp4-filename project.gp4
+        cat project.gp4
+    
+    - name: Get short SHA
+      id: slug
+      run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+
+    - name: Upload artifacts
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: gp4-${{ steps.slug.outputs.sha8 }}
+        path: |
+          *.gp4
