@@ -90,10 +90,12 @@ static char *generateStringFiles() {
 
 	while(ptr != NULL)
 	{
-		sprintf(output, "%s       <file targ_path=\"%s\" orig_path=\"%s\" />\n", output, ptr, ptr);
+        // printf("Generating file %s\n", ptr);
+		sprintf(output + strlen(output), "       <file targ_path=\"%s\" orig_path=\"%s\" />\n", ptr, ptr);
 		ptr = strtok(NULL, delim);
 	}
 
+    // printf("file section generated %s\n", output);
     return output;
 }
 
@@ -150,7 +152,7 @@ static int readParameters(int argc, char **argv) {
             // printf("option %s", long_options[option_index].name);
             if (optarg) {
                 // printf(" with arg %s", optarg);
-                strcpy(info_table[option_index].value, optarg);
+                strncpy(info_table[option_index].value, optarg, sizeof(info_table[option_index].value));
             }
             // printf("\n");
             break;
